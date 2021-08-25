@@ -1,0 +1,75 @@
+package second;
+import java.util.*;
+import java.io.*;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+        int m,n,q;
+        m=input.nextInt();
+        n=input.nextInt();
+        int a[][]=new int[m][n];
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++)
+                a[i][j]=input.nextInt();
+        
+        n=input.nextInt();
+        q=input.nextInt();
+        int b[][]=new int[n][q];
+        for(int i=0;i<n;i++)
+            for(int j=0;j<q;j++)
+                b[i][j]=input.nextInt();
+        int c[][]=new int[a.length][b[0].length];
+        jzmultiply (a ,b);
+        
+	}
+    public static int[][] creatjz ()
+	{
+		Scanner scan=new Scanner(System.in);
+		int a = scan.nextInt();
+		int b = scan.nextInt();
+		int[][] jz = new int[a][b];
+		int i,j;
+		
+		for(i=0;i<a;i++)
+		{
+			for(j=0;j<b;j++)
+			{
+				jz[i][j]=scan.nextInt();
+			}
+		}
+		return jz;
+	}
+	
+    public static void jzmultiply (int[][] a ,int[][] b)
+	{
+		int[][] sum = new int [a.length][b[0].length];
+		int i, j, k;
+		
+		for(i = 0; i < a.length; i++ )
+		{
+			for(j = 0; j < b[0].length; j++)
+			{
+				for(k = 0;k < b.length; k++)
+				{
+					sum[i][j] =sum[i][j] + a[i][k] * b[k][j];
+				}
+				 
+			}
+		}
+		printjz(sum,a.length,b[0].length);
+	}
+     public static void printjz(int[][] sum,int m,int q)
+    {
+		 int i, j;
+         for( i= 0; i<m; i++)
+         {
+             for( j=0; j<q; j++)
+                 System.out.print(sum[i][j]+" ");
+           System.out.println();	
+         }
+		}
+    
+}

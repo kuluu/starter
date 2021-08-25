@@ -1,0 +1,54 @@
+import java.io.*;
+public class Experiment {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		createFile("总成绩.xls");
+		File f = new File("C:\\Users\\administered\\Desktop","score.txt");
+		FileReader in = new FileReader(f);
+		BufferedReader in2 = new BufferedReader(in);
+		String title = null;
+		String stu[];
+		stu = new String[10];
+		
+		try {
+			title = in2.readLine();
+			int i=0;
+			
+			double total;
+			String x;
+			while((stu[i] = in2.readLine())!=null)
+			{
+				
+				total = getTotalScore(stu[i]);
+				x = "           " + total;
+				stu[i] += x;
+				i++;
+			}	
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+	}
+	static void createFile(String fileName)
+	{
+		File f = new File("D:\\Java\\实验8",fileName);
+	}
+	static double getTotalScore(String s)
+	{
+		String[] grade;
+		String regex = "\\D+";
+		grade = s.split(regex);
+		double m,n;
+		m = (float)Integer.parseInt(grade[1]);
+		n = (float)Integer.parseInt(grade[2]);
+		return (m *0.3 +n * 0.7);
+	}
+
+}

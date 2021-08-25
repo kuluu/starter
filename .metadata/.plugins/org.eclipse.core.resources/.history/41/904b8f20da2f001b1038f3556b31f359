@@ -1,0 +1,135 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Scanner;
+import java.io.*;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+
+public class ex {
+
+	public static void main(String[] args) {
+		try{
+			String s[] = new String[10];
+			createFile();
+			input1(s);
+			output(s);
+		}catch(Exception e)
+		{
+			System.out.print(e);
+		}
+			
+			
+	}
+	static void createFile(){
+			//建立一个成绩表，设立好基本的属性。
+			try{	
+				int rowNum=7;//表的行数			
+				HSSFRow row=null;
+				Workbook wb=new HSSFWorkbook();
+				HSSFSheet sheet = (HSSFSheet)wb.createSheet("成绩表"); //建立“成绩表”页	
+				for(int i=0;i<rowNum;i++)
+				{
+					row = sheet.createRow(i); 
+					if(i==0)
+						{
+						HSSFCell cell=row.createCell(0);  
+						cell.setCellValue("学员考试成绩一览表");  //表标题
+						sheet.addMergedRegion(new CellRangeAddress(0,0,0,5)); //表标题尺寸
+						}
+					if(i==1) {//在sheet里创建第二行
+						//创建单元格并设置单元格内容 
+						//初始化各属性名
+						row.createCell(0).setCellValue("学号");  
+						row.createCell(1).setCellValue("姓名");      
+						row.createCell(2).setCellValue("班级");  
+						row.createCell(3).setCellValue("平时成绩"); 
+						row.createCell(4).setCellValue("期末成绩"); 
+						row.createCell(5).setCellValue("总成绩");  
+					}
+				}
+			wb.close();
+			File outputFolder=new File("D:\\\\Java\\\\实验8");		
+			File outputFile=new File(outputFolder, "总成绩.xls");
+			FileOutputStream fout=new FileOutputStream(outputFile);			
+			wb.write(fout);  	//Workbook提供了write的方法
+			fout.flush();  
+			fout.close();		//将输出流关闭	
+			wb.close();
+			}
+			catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}		
+	}
+	static double getTotalScore(String str) {
+			String regex="\\s+";
+			String s[]=str.split(regex);
+			return Double.parseDouble(s[3])*0.3+0.7*Double.parseDouble(s[4]);
+			}
+	
+	
+	
+	static void input1(String st[]){
+			char []tom=new char[10];
+			int b;
+		try{	
+			File file=new File("D:\\\\Java\\\\实验8","score.txt");
+			FileReader in=new FileReader(file); 
+			BufferedReader inTwo= new BufferedReader(in);
+			for(int i=0;i<5;i++)
+				{
+				String strLine=inTwo.readLine();
+				st[i]=strLine;
+				}
+			while((b=in.read(tom,0,10))!=-1)
+			{
+				String s=new String(tom,0,b);
+				System.out.print(s);
+			}
+			in.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
+	
+			static void output(String st[]){
+				try{
+				Workbook wb=new HSSFWorkbook(new FileInputStream("D:\\Java\\实验8\\总成绩.xls"));
+				HSSFSheet sheet = (HSSFSheet) wb.getSheet("成绩表");
+				HSSFRow row=null;
+				int rowNum=7;//行数
+				String regex="\\s+";
+				for(int i=2;i<rowNum;i++)
+				{
+					row = sheet.createRow(i); 
+					String s[]=st[i-2].split(regex);
+					for(int j=0;j<5;j++)
+					row.createCell(j).setCellValue(s[j]);   
+					row.createCell(5).setCellValue(getTotalScore(st[i-2]));
+				}
+				File outputFolder=new File("D:\\Java\\实验8");		
+				File outputFile=new File(outputFolder, "总成绩.xls");
+				FileOutputStream fout=new FileOutputStream(outputFile);			
+				wb.write(fout);  	//Workbook提供了write的方法
+				fout.flush();  
+				fout.close();		//将输出流关闭	
+				wb.close();
+				}catch(Exception e)
+				{
+					System.out.print(e);
+				}
+			}
+}
